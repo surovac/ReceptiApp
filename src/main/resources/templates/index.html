@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="sr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+
+  <!-- Naziv koji se prikazuje na kartici browsera -->
+  <title>Recepti</title>
+
+  <!-- Povezivanje sa CSS fajlom koji cemo napraviti kasnije -->
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<!-- Glavni naslov aplikacije -->
+<div class="container">
+
+  <h1>Moji recepti</h1>
+
+  <!-- Dugme za dodavanje novog recepta -->
+  <a href="/novi" class="dugme">+ Dodaj novi recept</a>
+
+  <!-- Tabela u kojoj prikazujemo recepte iz baze -->
+  <table>
+
+    <thead>
+    <tr>
+      <th>Naziv</th>
+      <th>Kategorija</th>
+      <th>Sastojci</th>
+      <th>Priprema</th>
+      <th>Akcije</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <!-- Prolazimo kroz sve recepte koje Controller posalje stranici -->
+    <tr th:each="recept : ${recepti}">
+
+      <!-- Prikaz podataka jednog recepta -->
+      <td th:text="${recept.naziv}"></td>
+      <td th:text="${recept.kategorija}"></td>
+      <td th:text="${recept.sastojci}"></td>
+      <td th:text="${recept.priprema}"></td>
+
+      <td>
+        <!-- Dugme za izmenu recepta -->
+        <a th:href="@{/izmeni/{id}(id=${recept.id})}">
+          Izmeni
+        </a>
+
+        <!-- Dugme za brisanje recepta -->
+        <a th:href="@{/obrisi/{id}(id=${recept.id})}"
+           onclick="return confirm('Da li sigurno zelite da obrisete recept?');">
+          Obrisi
+        </a>
+      </td>
+
+    </tr>
+
+    </tbody>
+
+  </table>
+
+  <!-- Poruka ako jos nema recepata -->
+  <p th:if="${#lists.isEmpty(recepti)}">
+    Trenutno nema unetih recepata.
+  </p>
+
+</div>
+
+</body>
+</html>

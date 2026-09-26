@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="sr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Recept</title>
+
+    <!-- Povezivanje sa CSS fajlom -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Naslov stranice -->
+    <h1>Dodavanje / izmena recepta</h1>
+
+    <!-- Forma salje podatke Controller-u na adresu /sacuvaj -->
+    <form th:action="@{/sacuvaj}" th:object="${recept}" method="post">
+
+        <!-- Skriveni ID je potreban kada menjamo postojeci recept -->
+        <input type="hidden" th:field="*{id}">
+
+        <!-- Naziv recepta -->
+        <label for="naziv">Naziv recepta:</label>
+        <input type="text"
+               id="naziv"
+               th:field="*{naziv}"
+               required>
+
+        <!-- Kategorija recepta -->
+        <label for="kategorija">Kategorija:</label>
+        <input type="text"
+               id="kategorija"
+               th:field="*{kategorija}"
+               placeholder="Na primer: Glavno jelo"
+               required>
+
+        <!-- Sastojci -->
+        <label for="sastojci">Sastojci:</label>
+        <textarea id="sastojci"
+                  th:field="*{sastojci}"
+                  rows="5"
+                  required></textarea>
+
+        <!-- Nacin pripreme -->
+        <label for="priprema">Priprema:</label>
+        <textarea id="priprema"
+                  th:field="*{priprema}"
+                  rows="7"
+                  required></textarea>
+
+        <!-- Dugme za cuvanje -->
+        <button type="submit">Sacuvaj recept</button>
+
+        <!-- Povratak na pocetnu stranicu -->
+        <a href="/">Odustani</a>
+
+    </form>
+
+</div>
+
+</body>
+</html>
