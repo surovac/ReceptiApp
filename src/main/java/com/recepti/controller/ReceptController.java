@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-// Controller predstavlja prezentacioni sloj za recepte
 @Controller
 public class ReceptController {
 
@@ -20,31 +19,23 @@ public class ReceptController {
 
     // Pocetna stranica
     @GetMapping("/")
-    public String pocetna(HttpSession session, Model model) {
+    public String pocetna(HttpSession session) {
 
+        // Proveravamo da li je korisnik prijavljen
         Korisnik korisnik =
                 (Korisnik) session.getAttribute("korisnik");
 
-        // Ako korisnik nije prijavljen, saljemo ga na prijavu
         if (korisnik == null) {
             return "redirect:/prijava";
         }
 
-        // Prikazujemo samo recepte prijavljenog korisnika
-        model.addAttribute(
-                "recepti",
-                receptService.pronadjiSve(korisnik)
-        );
-
-        model.addAttribute("korisnik", korisnik);
-
+        // Pocetna vise ne prikazuje recepte
         return "index";
     }
 
-    // Pretraga recepata
-    @GetMapping("/pretraga")
-    public String pretraga(
-            @RequestParam String naziv,
+    // Prikazuje sve recepte prijavljenog korisnika
+    @GetMapping("/recepti")
+    public String prikaziSve(
             HttpSession session,
             Model model) {
 
@@ -55,28 +46,16 @@ public class ReceptController {
             return "redirect:/prijava";
         }
 
-        if (naziv == null || naziv.trim().isEmpty()) {
+        // Ucitavamo samo recepte prijavljenog korisnika
+        model.addAttribute(
+                "recepti",
+                receptService.pronadjiSve(korisnik)
+        );
 
-            model.addAttribute(
-                    "recepti",
-                    receptService.pronadjiSve(korisnik)
-            );
-
-        } else {
-
-            model.addAttribute(
-                    "recepti",
-                    receptService.pretraziPoNazivu(korisnik, naziv)
-            );
-        }
-
-        model.addAttribute("nazivPretrage", naziv);
-        model.addAttribute("korisnik", korisnik);
-
-        return "index";
+        return "recepti";
     }
 
-    // Otvara formu za novi recept
+    // Otvara formu za dodavanje novog recepta
     @GetMapping("/novi")
     public String noviRecept(
             HttpSession session,
@@ -107,15 +86,52 @@ public class ReceptController {
             return "redirect:/prijava";
         }
 
-        // Recept pripada trenutno prijavljenom korisniku
+        // Recept povezujemo sa trenutno prijavljenim korisnikom
         recept.setKorisnik(korisnik);
 
         receptService.sacuvaj(recept);
 
-        return "redirect:/";
+        // Nakon cuvanja prikazujemo sve recepte
+        return "redirect:/recepti";
     }
 
-    // Otvara formu za izmenu recepta
+    // Pretraga recepata po nazivu
+    @GetMapping("/pretraga")
+    public String pretraga(
+            @RequestParam String naziv,
+            HttpSession session,
+            Model model) {
+
+        Korisnik korisnik =
+                (Korisnik) session.getAttribute("korisnik");
+
+        if (korisnik == null) {
+            return "redirect:/prijava";
+        }
+
+        // Ako je pretraga prazna, prikazujemo sve recepte
+        if (naziv == null || naziv.trim().isEmpty()) {
+
+            model.addAttribute(
+                    "recepti",
+                    receptService.pronadjiSve(korisnik)
+            );
+
+        } else {
+
+            // Pretrazujemo samo recepte prijavljenog korisnika
+            model.addAttribute(
+                    "recepti",
+                    receptService.pretraziPoNazivu(korisnik, naziv)
+            );
+        }
+
+        model.addAttribute("nazivPretrage", naziv);
+
+        return "recepti";
+    }
+
+    // Otvara formu za izmenu postojeceg recepta
     @GetMapping("/izmeni/{id}")
     public String izmeniRecept(
             @PathVariable Long id,
@@ -136,7 +152,7 @@ public class ReceptController {
                 recept.getKorisnik() == null ||
                 !recept.getKorisnik().getId().equals(korisnik.getId())) {
 
-            return "redirect:/";
+            return "redirect:/recepti";
         }
 
         model.addAttribute("recept", recept);
@@ -144,7 +160,7 @@ public class ReceptController {
         return "forma";
     }
 
-    // Brisanje recepta
+    // Brise recept
     @GetMapping("/obrisi/{id}")
     public String obrisiRecept(
             @PathVariable Long id,
@@ -167,6 +183,6 @@ public class ReceptController {
             receptService.obrisi(id);
         }
 
-        return "redirect:/";
+        return "redirect:/recepti";
     }
 }

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="sr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Moji recepti</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Moji recepti</h1>
+
+  <!-- Dugmad za povratak i dodavanje -->
+  <div class="akcije">
+
+    <a href="/" class="dugme">
+      Početna
+    </a>
+
+    <a href="/novi" class="dugme">
+      + Novi recept
+    </a>
+
+  </div>
+
+  <!-- Tabela sa receptima -->
+  <table>
+
+    <thead>
+    <tr>
+      <th>Naziv</th>
+      <th>Kategorija</th>
+      <th>Sastojci</th>
+      <th>Priprema</th>
+      <th>Akcije</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <tr th:each="recept : ${recepti}">
+
+      <td th:text="${recept.naziv}"></td>
+      <td th:text="${recept.kategorija}"></td>
+      <td th:text="${recept.sastojci}"></td>
+      <td th:text="${recept.priprema}"></td>
+
+      <td>
+        <a th:href="@{/izmeni/{id}(id=${recept.id})}">
+          Izmeni
+        </a>
+
+        <a th:href="@{/obrisi/{id}(id=${recept.id})}"
+           onclick="return confirm('Da li sigurno želite da obrišete recept?');">
+          Obriši
+        </a>
+      </td>
+
+    </tr>
+
+    </tbody>
+
+  </table>
+
+  <!-- Ako nema recepata -->
+  <p th:if="${#lists.isEmpty(recepti)}">
+    Nema pronađenih recepata.
+  </p>
+
+</div>
+
+</body>
+</html>

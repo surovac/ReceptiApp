@@ -9,86 +9,96 @@
 
 <body>
 
-<div class="container">
+<div style="
+    width: 100%;
+    padding-top: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+">
 
-  <div class="zaglavlje">
-    <p>
-      Prijavljeni korisnik:
-      <strong th:text="${korisnik.korisnickoIme}"></strong>
-    </p>
+  <h1 style="
+        margin: 0 0 30px 0;
+        font-family: Arial, sans-serif;
+        font-size: 36px;
+    ">
+    Moji recepti
+  </h1>
 
-    <a href="/odjava" class="dugme">Odjava</a>
-  </div>
-
-  <h1>Moji recepti</h1>
-
-  <!-- Pretraga -->
-  <form action="/pretraga" method="get" class="pretraga">
+  <form action="/pretraga"
+        method="get"
+        style="
+              width: 600px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+          ">
 
     <input type="text"
            name="naziv"
-           th:value="${nazivPretrage}"
-           placeholder="Unesite naziv recepta">
+           placeholder="Pretraži recepte..."
+           required
+           style="
+                   width: 600px;
+                   height: 48px;
+                   padding: 0 20px;
+                   border: 1px solid #bbb;
+                   border-radius: 24px;
+                   font-size: 15px;
+                   outline: none;
+                   box-sizing: border-box;
+               ">
 
-    <button type="submit">Pretrazi</button>
+    <button type="submit"
+            style="
+                    margin-top: 20px;
+                    padding: 10px 20px;
+                    background: #333;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    font-size: 14px;
+                    cursor: pointer;
+                ">
+      Pretraži
+    </button>
 
   </form>
 
-  <!-- Glavne akcije -->
-  <div class="akcije">
+  <div style="
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 12px;
+    ">
 
-    <a href="/novi" class="dugme">
-      + Dodaj novi recept
+    <a href="/novi"
+       style="
+               padding: 10px 20px;
+               background: #333;
+               color: white;
+               text-decoration: none;
+               border-radius: 4px;
+               font-family: Arial, sans-serif;
+               font-size: 14px;
+           ">
+      + Novi recept
     </a>
 
-    <a href="/" class="dugme">
-      Prikazi sve
+    <a href="/recepti"
+       style="
+               padding: 10px 20px;
+               background: #333;
+               color: white;
+               text-decoration: none;
+               border-radius: 4px;
+               font-family: Arial, sans-serif;
+               font-size: 14px;
+           ">
+      Prikaži sve
     </a>
 
   </div>
-
-  <!-- Recepti -->
-  <table>
-
-    <thead>
-    <tr>
-      <th>Naziv</th>
-      <th>Kategorija</th>
-      <th>Sastojci</th>
-      <th>Priprema</th>
-      <th>Akcije</th>
-    </tr>
-    </thead>
-
-    <tbody>
-
-    <tr th:each="recept : ${recepti}">
-
-      <td th:text="${recept.naziv}"></td>
-      <td th:text="${recept.kategorija}"></td>
-      <td th:text="${recept.sastojci}"></td>
-      <td th:text="${recept.priprema}"></td>
-
-      <td>
-        <a th:href="@{/izmeni/{id}(id=${recept.id})}">
-          Izmeni
-        </a>
-
-        <a th:href="@{/obrisi/{id}(id=${recept.id})}"
-           onclick="return confirm('Da li sigurno zelite da obrisete recept?');">
-          Obrisi
-        </a>
-      </td>
-
-    </tr>
-
-    </tbody>
-
-  </table>
-
-  <p th:if="${#lists.isEmpty(recepti)}">
-    Nema pronadjenih recepata.
-  </p>
 
 </div>
 
