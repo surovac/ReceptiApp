@@ -1,32 +1,30 @@
 package com.recepti.model;
 
-// Uvoz anotacija koje koristimo za rad sa bazom podataka
 import jakarta.persistence.*;
 
-// Oznacava da ova klasa predstavlja tabelu u bazi podataka
+// Klasa predstavlja recept u bazi podataka
 @Entity
 public class Recept {
 
-    // Primarni kljuc tabele
     @Id
-    // ID se automatski generise za svaki novi recept
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Osnovni podaci o receptu
     private String naziv;
     private String kategorija;
     private String sastojci;
 
-    // Dozvoljavamo duzi tekst za opis pripreme
     @Column(length = 2000)
     private String priprema;
 
-    // Prazan konstruktor potreban za rad JPA
+    // Vise recepata moze pripadati jednom korisniku
+    @ManyToOne
+    @JoinColumn(name = "korisnik_id")
+    private Korisnik korisnik;
+
     public Recept() {
     }
 
-    // Konstruktor za pravljenje novog recepta
     public Recept(String naziv, String kategorija,
                   String sastojci, String priprema) {
         this.naziv = naziv;
@@ -35,7 +33,6 @@ public class Recept {
         this.priprema = priprema;
     }
 
-    // Getter i setter za ID
     public Long getId() {
         return id;
     }
@@ -44,7 +41,6 @@ public class Recept {
         this.id = id;
     }
 
-    // Getter i setter za naziv
     public String getNaziv() {
         return naziv;
     }
@@ -53,7 +49,6 @@ public class Recept {
         this.naziv = naziv;
     }
 
-    // Getter i setter za kategoriju
     public String getKategorija() {
         return kategorija;
     }
@@ -62,7 +57,6 @@ public class Recept {
         this.kategorija = kategorija;
     }
 
-    // Getter i setter za sastojke
     public String getSastojci() {
         return sastojci;
     }
@@ -71,12 +65,19 @@ public class Recept {
         this.sastojci = sastojci;
     }
 
-    // Getter i setter za pripremu
     public String getPriprema() {
         return priprema;
     }
 
     public void setPriprema(String priprema) {
         this.priprema = priprema;
+    }
+
+    public Korisnik getKorisnik() {
+        return korisnik;
+    }
+
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
     }
 }

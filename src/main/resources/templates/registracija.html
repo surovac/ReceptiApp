@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="sr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registracija</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Registracija</h1>
+
+    <p th:if="${param.greska}" class="greska">
+        Korisnicko ime vec postoji.
+    </p>
+
+    <form th:action="@{/registracija}"
+          th:object="${korisnik}"
+          method="post">
+
+        <label for="korisnickoIme">Korisnicko ime:</label>
+        <input type="text"
+               id="korisnickoIme"
+               th:field="*{korisnickoIme}"
+               required>
+
+        <label for="email">Email:</label>
+        <input type="email"
+               id="email"
+               th:field="*{email}"
+               required>
+
+        <label for="lozinka">Lozinka:</label>
+        <input type="password"
+               id="lozinka"
+               th:field="*{lozinka}"
+               required>
+
+        <button type="submit">Registruj se</button>
+
+    </form>
+
+    <p>
+        Vec imate nalog?
+        <a href="/prijava">Prijavite se</a>
+    </p>
+
+</div>
+
+</body>
+</html>

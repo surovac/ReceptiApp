@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="sr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Prijava</title>
+
+    <!-- Povezivanje sa postojecim CSS fajlom -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Naslov stranice -->
+    <h1>Prijava</h1>
+
+    <!-- Poruka ako korisnicko ime ili lozinka nisu ispravni -->
+    <p th:if="${greska}"
+       th:text="${greska}"
+       class="greska">
+    </p>
+
+    <!-- Forma za prijavu korisnika -->
+    <form action="/prijava" method="post">
+
+        <!-- Korisnicko ime -->
+        <label for="korisnickoIme">Korisnicko ime:</label>
+        <input type="text"
+               id="korisnickoIme"
+               name="korisnickoIme"
+               required>
+
+        <!-- Lozinka -->
+        <label for="lozinka">Lozinka:</label>
+        <input type="password"
+               id="lozinka"
+               name="lozinka"
+               required>
+
+        <!-- Dugme za prijavu -->
+        <button type="submit">Prijavi se</button>
+
+    </form>
+
+    <!-- Prelazak na registraciju -->
+    <p>
+        Nemate nalog?
+        <a href="/registracija">Registrujte se</a>
+    </p>
+
+</div>
+
+</body>
+</html>

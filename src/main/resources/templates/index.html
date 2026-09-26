@@ -3,25 +3,51 @@
 
 <head>
   <meta charset="UTF-8">
-
-  <!-- Naziv koji se prikazuje na kartici browsera -->
-  <title>Recepti</title>
-
-  <!-- Povezivanje sa CSS fajlom koji cemo napraviti kasnije -->
+  <title>Moji recepti</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
 
-<!-- Glavni naslov aplikacije -->
 <div class="container">
+
+  <div class="zaglavlje">
+    <p>
+      Prijavljeni korisnik:
+      <strong th:text="${korisnik.korisnickoIme}"></strong>
+    </p>
+
+    <a href="/odjava" class="dugme">Odjava</a>
+  </div>
 
   <h1>Moji recepti</h1>
 
-  <!-- Dugme za dodavanje novog recepta -->
-  <a href="/novi" class="dugme">+ Dodaj novi recept</a>
+  <!-- Pretraga -->
+  <form action="/pretraga" method="get" class="pretraga">
 
-  <!-- Tabela u kojoj prikazujemo recepte iz baze -->
+    <input type="text"
+           name="naziv"
+           th:value="${nazivPretrage}"
+           placeholder="Unesite naziv recepta">
+
+    <button type="submit">Pretrazi</button>
+
+  </form>
+
+  <!-- Glavne akcije -->
+  <div class="akcije">
+
+    <a href="/novi" class="dugme">
+      + Dodaj novi recept
+    </a>
+
+    <a href="/" class="dugme">
+      Prikazi sve
+    </a>
+
+  </div>
+
+  <!-- Recepti -->
   <table>
 
     <thead>
@@ -36,22 +62,18 @@
 
     <tbody>
 
-    <!-- Prolazimo kroz sve recepte koje Controller posalje stranici -->
     <tr th:each="recept : ${recepti}">
 
-      <!-- Prikaz podataka jednog recepta -->
       <td th:text="${recept.naziv}"></td>
       <td th:text="${recept.kategorija}"></td>
       <td th:text="${recept.sastojci}"></td>
       <td th:text="${recept.priprema}"></td>
 
       <td>
-        <!-- Dugme za izmenu recepta -->
         <a th:href="@{/izmeni/{id}(id=${recept.id})}">
           Izmeni
         </a>
 
-        <!-- Dugme za brisanje recepta -->
         <a th:href="@{/obrisi/{id}(id=${recept.id})}"
            onclick="return confirm('Da li sigurno zelite da obrisete recept?');">
           Obrisi
@@ -64,9 +86,8 @@
 
   </table>
 
-  <!-- Poruka ako jos nema recepata -->
   <p th:if="${#lists.isEmpty(recepti)}">
-    Trenutno nema unetih recepata.
+    Nema pronadjenih recepata.
   </p>
 
 </div>

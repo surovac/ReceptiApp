@@ -1,39 +1,44 @@
 package com.recepti.service;
 
+import com.recepti.model.Korisnik;
 import com.recepti.model.Recept;
 import com.recepti.repository.ReceptRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-// Service sloj sadrzi poslovnu logiku aplikacije
+// Service sloj sadrzi poslovnu logiku za recepte
 @Service
 public class ReceptService {
 
-    // Repository koristimo za pristup bazi podataka
     private final ReceptRepository receptRepository;
 
-    // Konstruktor preko kojeg Spring povezuje Repository sa Service slojem
     public ReceptService(ReceptRepository receptRepository) {
         this.receptRepository = receptRepository;
     }
 
-    // Vraca sve recepte iz baze
-    public List<Recept> pronadjiSve() {
-        return receptRepository.findAll();
+    // Vraca recepte prijavljenog korisnika
+    public List<Recept> pronadjiSve(Korisnik korisnik) {
+        return receptRepository.findByKorisnik(korisnik);
     }
 
-    // Cuva novi recept ili izmene postojeceg recepta
+    // Pretraga recepata prijavljenog korisnika
+    public List<Recept> pretraziPoNazivu(Korisnik korisnik, String naziv) {
+        return receptRepository
+                .findByKorisnikAndNazivContainingIgnoreCase(korisnik, naziv);
+    }
+
+    // Cuvanje recepta
     public Recept sacuvaj(Recept recept) {
         return receptRepository.save(recept);
     }
 
-    // Pronalazi jedan recept na osnovu njegovog ID-a
+    // Pronalazenje recepta
     public Recept pronadjiPoId(Long id) {
         return receptRepository.findById(id).orElse(null);
     }
 
-    // Brise recept iz baze na osnovu ID-a
+    // Brisanje recepta
     public void obrisi(Long id) {
         receptRepository.deleteById(id);
     }
